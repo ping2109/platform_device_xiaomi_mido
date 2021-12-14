@@ -46,4 +46,4 @@ BUILD_FINGERPRINT := "xiaomi/mido/mido:7.0/NRD90M/V9.6.1.0.NCFMIFD:user/release-
 
 # Add CherishOS Maintainer name
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.cherish.maintainer="Anh Vinh (ping2109)"
+    ro.cherish.maintainer="ping2109"
