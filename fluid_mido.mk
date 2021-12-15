@@ -27,7 +27,7 @@ $(call inherit-product, vendor/fluid/config/common_full_phone.mk)
 # Gapps
 TARGET_INCLUDE_GAPPS := true
 TARGET_GAPPS_ARCH := arm64
-TARGET_SUPPORTS_GOOGLE_RECORDER := false
+TARGET_SUPPORTS_GOOGLE_RECORDER := true
 TARGET_INCLUDE_STOCK_ARCORE := false
 TARGET_INCLUDE_LIVE_WALLPAPERS := false
 
@@ -49,7 +49,7 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
 BUILD_FINGERPRINT := "xiaomi/mido/mido:7.0/NRD90M/V9.6.1.0.NCFMIFD:user/release-keys"
 
 PRODUCT_PRODUCT_PROPERTIES += \
-	ro.fluid.maintainer=Kingsman44 \
+	ro.fluid.maintainer=ping2109 \
 	ro.fluid.cpu=MSM8953
 
 PRODUCT_PROPERTY_OVERRIDES += \
