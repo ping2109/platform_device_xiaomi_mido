@@ -14,9 +14,9 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/fluid_mido.mk
+    $(LOCAL_DIR)/radiant_mido.mk
 
 COMMON_LUNCH_CHOICES := \
-    fluid_mido-user \
-    fluid_mido-userdebug \
-    fluid_mido-eng
+    radiant_mido-user \
+    radiant_mido-userdebug \
+    radiant_mido-eng
