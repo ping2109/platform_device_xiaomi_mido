@@ -24,6 +24,9 @@ $(call inherit-product, device/xiaomi/mido/device.mk)
 # Inherit some common CherishOS stuff.
 $(call inherit-product, vendor/cherish/config/common_full_phone.mk)
 
+# Gapps
+WITH_GMS := true
+
 # Boot animation
 TARGET_BOOT_ANIMATION_RES := 1080
 
