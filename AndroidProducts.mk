@@ -14,9 +14,9 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/fluid_mido.mk
+    $(LOCAL_DIR)/awaken_mido.mk
 
 COMMON_LUNCH_CHOICES := \
-    fluid_mido-user \
-    fluid_mido-userdebug \
-    fluid_mido-eng
+    awaken_mido-user \
+    awaken_mido-userdebug \
+    awaken_mido-eng
