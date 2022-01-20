@@ -71,7 +71,7 @@ class HWCDisplayPrimary : public HWCDisplay {
   virtual DisplayError ControlPartialUpdate(bool enable, uint32_t *pending);
   virtual DisplayError SetDynamicDSIClock(uint64_t bitclk);
   virtual DisplayError GetDynamicDSIClock(uint64_t *bitclk);
-  virtual DisplayError SetStandByMode(bool enable, bool is_twm);
+  virtual DisplayError SetStandByMode(bool enable);
 
  private:
   HWCDisplayPrimary(CoreInterface *core_intf, BufferAllocator *buffer_allocator,

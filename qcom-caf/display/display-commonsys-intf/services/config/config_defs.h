@@ -33,6 +33,9 @@
 #include <vector>
 #include <string>
 
+#include <errno.h>
+#include <cutils/native_handle.h>
+
 // #defines specifying the API level supported
 // Client can use these API level #ifdefs in their implementation to call the
 // corresponding DisplayConfig API independent of the underlying DisplayConfig
@@ -376,6 +379,7 @@ class ConfigInterface {
   virtual int SetWiderModePreference(uint64_t /* physical_disp_id */,
                                      WiderModePref /* mode_pref */) DEFAULT_RET
   virtual int ControlCameraSmoothCallback(bool /* enable */) DEFAULT_RET
+  virtual int DummyDisplayConfigAPI() DEFAULT_RET
 
   // deprecated APIs
   virtual int GetDebugProperty(const std::string /* prop_name */,

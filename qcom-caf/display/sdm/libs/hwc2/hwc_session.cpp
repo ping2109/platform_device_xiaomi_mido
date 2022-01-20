@@ -22,7 +22,6 @@
 #include <utils/constants.h>
 #include <utils/String16.h>
 #include <cutils/properties.h>
-#include <bfqio/bfqio.h>
 #include <hardware_legacy/uevent.h>
 #include <sys/resource.h>
 #include <sys/prctl.h>
@@ -86,7 +85,6 @@ void HWCUEvent::UEventThread(HWCUEvent *hwc_uevent) {
 
   prctl(PR_SET_NAME, uevent_thread_name, 0, 0, 0);
   setpriority(PRIO_PROCESS, 0, HAL_PRIORITY_URGENT_DISPLAY);
-  android_set_rt_ioprio(0, 1);
 
   int status = uevent_init();
   if (!status) {
@@ -169,10 +167,20 @@ int HWCSession::Init() {
 
   StartServices();
 
-  DisplayError error = kErrorNone;
+  DisplayError error = buffer_allocator_.Init();
+  if (error != kErrorNone) {
+    ALOGE("%s::%s: Buffer allocaor initialization failed. Error = %d",
+          __CLASS__, __FUNCTION__, error);
+    return -EINVAL;
+  }
 
   error = CoreInterface::CreateCore(HWCDebugHandler::Get(), &buffer_allocator_,
                                     &buffer_sync_handler_, &socket_handler_, &core_intf_);
+  if (error != kErrorNone) {
+    buffer_allocator_.Deinit();
+    ALOGE("%s::%s: Display core initialization failed. Error = %d", __CLASS__, __FUNCTION__, error);
+    return -EINVAL;
+  }
 
   g_hwc_uevent_.Register(this);
 
@@ -182,6 +190,7 @@ int HWCSession::Init() {
   if (error != kErrorNone) {
     g_hwc_uevent_.Register(nullptr);
     CoreInterface::DestroyCore();
+    buffer_allocator_.Deinit();
     DLOGE("Primary display type not recognized. Error = %d", error);
     return -EINVAL;
   }
@@ -210,6 +219,7 @@ int HWCSession::Init() {
   if (status) {
     g_hwc_uevent_.Register(nullptr);
     CoreInterface::DestroyCore();
+    buffer_allocator_.Deinit();
     return status;
   }
 
@@ -1699,18 +1709,13 @@ android::status_t HWCSession::SetStandByMode(const android::Parcel *input_parcel
   SCOPE_LOCK(locker_[HWC_DISPLAY_PRIMARY]);
 
   bool enable = (input_parcel->readInt32() > 0);
-  bool is_twm = (input_parcel->readInt32() > 0);
 
   if (!hwc_display_[HWC_DISPLAY_PRIMARY]) {
     DLOGI("Primary display is not initialized");
     return -EINVAL;
   }
 
-  DisplayError error = hwc_display_[HWC_DISPLAY_PRIMARY]->SetStandByMode(enable, is_twm);
-  if (error != kErrorNone) {
-    DLOGE("SetStandByMode failed. Error = %d", error);
-    return -EINVAL;
-  }
+  hwc_display_[HWC_DISPLAY_PRIMARY]->SetStandByMode(enable);
 
   return android::NO_ERROR;
 }

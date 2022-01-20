@@ -84,7 +84,7 @@ on late-fs
     start bootanim
     start vendor.hwcomposer-2-1
     start vendor.configstore-hal
-    start vendor.qti.hardware.display.allocator
+    start vendor.gralloc-2-0
 
     # mount RW partitions which need run fsck
     mount_all /vendor/etc/fstab.qcom --late
@@ -435,6 +435,17 @@ service vendor.sensors-hal-1-0 /vendor/bin/hw/android.hardware.sensors@1.0-servi
     group system wakelock uhid input context_hub
     capabilities BLOCK_SUSPEND
     rlimit rtprio 10 10
+
+service vendor.audio-hal /vendor/bin/hw/android.hardware.audio.service
+    override
+    class hal
+    user audioserver
+    # media gid needed for /dev/fm (radio) and for /data/misc/media (tee)
+    group audio camera drmrpc inet media mediadrm net_bt net_bt_admin net_bw_acct oem_2901 wakelock
+    capabilities BLOCK_SUSPEND
+    ioprio rt 4
+    writepid /dev/cpuset/foreground/tasks /dev/stune/foreground/tasks
+    onrestart restart audioserver
 
 on property:hw.fm.init=*
     write /sys/module/radio_iris_transport/parameters/fmsmd_set ${hw.fm.init}
